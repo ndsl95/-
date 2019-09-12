@@ -11,6 +11,9 @@ public class FileManager : MonoBehaviour
     string currentFilePath;
     string document = "Picture";
     string fullPath;
+
+    bool fileReadState = false;
+    static public FileManager Instance;
      
 
     // Start is called before the first frame update
@@ -18,6 +21,7 @@ public class FileManager : MonoBehaviour
     {
         dirLists = new List<string>();
         pptLists = new List<string>();
+        Instance = this;
     }
     void Start ( )
     {
@@ -108,6 +112,12 @@ public class FileManager : MonoBehaviour
                 }
             }
         }
+        fileReadState = true;
+    }
+
+    public bool GetFileReadState()
+    {
+        return fileReadState;
     }
 
 }

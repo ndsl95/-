@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class ShowManager : MonoBehaviour
+public class ShowManager : MonoBehaviour,IPointerUpHandler, IPointerDownHandler
 {
     public Button backBtn;
     public Button frontBtn;
     public Button nextBtn;
     public Image showImage;
     List<Sprite> curSpriteList;//当前展示的SpriteList
+    [SerializeField]
     int curIndex;//当前展示的index
     int returnTag;//0表示直接返回main，1表示返回pptPanel
     public static  ShowManager instance;
@@ -29,20 +31,12 @@ public class ShowManager : MonoBehaviour
 
         frontBtn.onClick.AddListener(delegate ( )
         {
-            if(curIndex>0)
-            {
-                curIndex--;
-                showImage.sprite = curSpriteList[curIndex]; 
-            }
+            FrontPanel();
         });
 
         nextBtn.onClick.AddListener(delegate ( )
         {
-            if(curIndex<curSpriteList.Count-1)
-            {
-                curIndex++;
-                showImage.sprite = curSpriteList[curIndex];
-            }
+            NextPanel();
         });
     }
 
@@ -53,5 +47,45 @@ public class ShowManager : MonoBehaviour
         curSpriteList = targetSprite;
         this.gameObject.SetActive(true);
         showImage.sprite = curSpriteList[0];
+        curIndex = 0;
+    }
+
+    void IPointerDownHandler.OnPointerDown (PointerEventData eventData)
+    {
+        if (PPTManager.Instance != null)
+        {
+            PPTManager.Instance.playRandomPPT = false;
+        }
+    }
+
+    public void NextPanel()
+    {
+        if (curIndex < curSpriteList.Count - 1)
+        {
+            curIndex++;
+            showImage.sprite = curSpriteList[curIndex];
+        }
+    }
+
+
+    public  void FrontPanel()
+    {
+        if (curIndex > 0)
+        {
+            curIndex--;
+            showImage.sprite = curSpriteList[curIndex];
+        }
+    }
+
+    void IPointerUpHandler.OnPointerUp (PointerEventData eventData)
+    {
+        if (eventData.position.x - eventData.pressPosition.x > 20)//右滑
+        {
+            NextPanel();
+        }
+        else if (eventData.position.x - eventData.pressPosition.x < -20)//左滑动
+        {
+            FrontPanel();
+        }
     }
 }

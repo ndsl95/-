@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class PPTManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    public static PPTManager Instance;
+
     public GameObject rootGrid;
     [SerializeField]
     public List<ProjectClass> prjClassLists;//Data读取的字典
@@ -24,6 +26,16 @@ public class PPTManager : MonoBehaviour
 
     public float stepPanel=0;//scroll步进
 
+    [Header("Random PPT")]
+    public bool playRandomPPT = false;
+    [SerializeField]
+    float currentTime = 0.0f;
+    public int limitTime = 5;
+    
+    public int currentPPTIndex = 0;//当前播放的下标
+    [SerializeField]
+    ProjectClass currentPPT;//当前播放的PPT项目
+
     private void Awake ( )
     {
 
@@ -34,9 +46,60 @@ public class PPTManager : MonoBehaviour
         });
         frontBtn.onClick.AddListener(LeftPanel);
         nextBtn.onClick.AddListener(RightPanel);
+        Instance = this;
 
     }
 
+    void Update()
+    {
+        if (playRandomPPT)//开始随机播放PPT
+        {
+            Debug.Log("Project:" + currentPPT.projectName);
+            gameObject.SetActive(true);
+            currentTime += Time.deltaTime;
+            if (currentTime >= limitTime)
+            {
+                if (currentPPTIndex < currentPPT.spriteLists.Count - 1)//还有下一张
+                {
+                    showManager.NextPanel();
+                    currentPPTIndex++;
+                }
+                else
+                {
+                    PlayRandomPPT(limitTime);
+                }
+                currentTime = 0.0f;
+            }
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            playRandomPPT = false;
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            PlayRandomPPT(1);
+        }
+    }
+
+    public void setPPTValue (bool value)
+    {
+        playRandomPPT = value;
+    }
+
+
+    //随机播放一个项目APP
+    public void PlayRandomPPT (int time = 5)
+    {
+        this.gameObject.SetActive(true);
+        limitTime = time;
+        int projectIndex = UnityEngine.Random.Range(0 , SaveData.instance.ProjectLists.Count - 1);//随机选择一个项目
+        currentPPT = SaveData.instance.ProjectLists[projectIndex];
+        showManager.SetShowImage(currentPPT.spriteLists,1);
+        currentPPTIndex = 0;
+        playRandomPPT = true;
+    }
 
 
     public void Init()

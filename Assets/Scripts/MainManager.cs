@@ -9,12 +9,15 @@ public class MainManager : MonoBehaviour
     public Button znBtn;//兆能
     public Button zhBtn;//兆和
     public Button pptBtn;
+    public Button exitBtn;
+    public Button autoBtn;
 
     public GameObject tips;
 
     public ShowManager showManager;
     public FileManager fileManager;
     public PPTManager pptManager;
+    public AutoPlayerPanel autoPanel;
    
     // Start is called before the first frame update
     void Start()
@@ -22,6 +25,8 @@ public class MainManager : MonoBehaviour
         znBtn.onClick.AddListener(znBtnOnClick);
         zhBtn.onClick.AddListener(zhBtnOnClick);
         pptBtn.onClick.AddListener(pptBtnOnClick);
+        autoBtn.onClick.AddListener(delegate ( ) { autoButtonOnclick(); });
+        exitBtn.onClick.AddListener(delegate ( ) { Application.Quit(); });
     }
 
     private void Update ( )
@@ -48,5 +53,19 @@ public class MainManager : MonoBehaviour
         fileManager.SearchPPTDirectory();
         pptManager.Init();
         tips.gameObject.SetActive(false);
+    }
+
+    void autoButtonOnclick()    
+    {
+        StartCoroutine(autoButtonOnClickCoroutline());
+    }
+
+    IEnumerator autoButtonOnClickCoroutline()
+    {
+        fileManager.SearchPPTDirectory();
+        yield return new WaitUntil(FileManager.Instance.GetFileReadState);
+        pptManager.Init();
+        autoPanel.gameObject.SetActive(true);
+
     }
 }
