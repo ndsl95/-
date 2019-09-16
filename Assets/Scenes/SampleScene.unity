@@ -1349,6 +1349,7 @@ MonoBehaviour:
   zhLists: []
   znLists: []
   catalogButton: {fileID: 1496452031}
+  tipsPanel: {fileID: 0}
 --- !u!114 &378284250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3552,8 +3553,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 876.4, y: 464.7}
-  m_SizeDelta: {x: 165.1, y: 146.5}
+  m_AnchoredPosition: {x: -841.3, y: 398.9}
+  m_SizeDelta: {x: 234.4, y: 278}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1397363856
 MonoBehaviour:

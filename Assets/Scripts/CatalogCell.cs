@@ -33,16 +33,19 @@ public class CatalogCell : MonoBehaviour
                 case 0:
                     GetComponent<Button>().onClick.AddListener(delegate ( ) {
                         showManager.SetShowImage(SaveData.instance.ZhLists,1);
+                        CatalogPanel.Instance.shrinkPanel();
                     });
                     break;
                 case 1:
                     GetComponent<Button>().onClick.AddListener(delegate ( ) {
                         showManager.SetShowImage(SaveData.instance.ZnLists,1);
+                        CatalogPanel.Instance.shrinkPanel();
                     });
                     break;
                 case 2:
                     GetComponent<Button>().onClick.AddListener(delegate ( ) {
                         showManager.SetShowImage(project.spriteLists , 1);
+                        CatalogPanel.Instance.shrinkPanel();
                     });
                     break;
 

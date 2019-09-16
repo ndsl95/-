@@ -5,6 +5,7 @@ using UnityEngine.UI;
 //右边目录,固定显示5个项目，其他PPT，所有的视频
 public class CatalogPanel : MonoBehaviour
 {
+    static public CatalogPanel Instance;
     [SerializeField]
     int num = 0;//项目个数+PPT个数+视频个数
     public CatalogCell btnPrefabs;
@@ -25,16 +26,26 @@ public class CatalogPanel : MonoBehaviour
     [Header("Animator")]
     public Animator catalogButton;
 
+    public GameObject tipsPanel;
     bool animatorState = false;
 
     void Awake()
     {
+        Instance = this;
         catalogButton.GetComponent<Button>().onClick.AddListener(delegate ( ) {
-            animatorState = !animatorState;
-            catalogButton.SetBool("Start" , animatorState);
-            GetComponent<Animator>().SetBool("Start" , animatorState);
+            if (FileManager.Instance.GetFileReadState())
+            {
+                
+                animatorState = !animatorState;
+                catalogButton.SetBool("Start" , animatorState);
+                GetComponent<Animator>().SetBool("Start" , animatorState);
+            }
         });
+
+
     }
+
+
     void Start ( )
     {
         if (btnLists.Count <= 0)
@@ -42,11 +53,10 @@ public class CatalogPanel : MonoBehaviour
             zhLists = new List<Sprite>();
             znLists = new List<Sprite>();
             pptLists = new List<ProjectClass>();
-            StartCoroutine(Init());
         }
+        StartCoroutine(Init());
     }
 
-    // Update is called once per frame
     void Update ( )
     {
 
@@ -92,5 +102,11 @@ public class CatalogPanel : MonoBehaviour
             newBtn.GetComponent<CatalogCell>().Init();
             btnLists.Add(newBtn);
         }
+    }
+    
+    public void shrinkPanel()
+    {
+        catalogButton.SetBool("Start" , false);
+        GetComponent<Animator>().SetBool("Start" , false);
     }
 }

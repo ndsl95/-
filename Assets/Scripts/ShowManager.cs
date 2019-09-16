@@ -81,11 +81,11 @@ public class ShowManager : MonoBehaviour,IPointerUpHandler, IPointerDownHandler
     {
         if (eventData.position.x - eventData.pressPosition.x > 20)//右滑
         {
-            NextPanel();
+            FrontPanel();
         }
         else if (eventData.position.x - eventData.pressPosition.x < -20)//左滑动
         {
-            FrontPanel();
+            NextPanel();
         }
     }
 }
